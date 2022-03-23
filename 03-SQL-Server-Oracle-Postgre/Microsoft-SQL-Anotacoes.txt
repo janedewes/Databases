@@ -1,0 +1,200 @@
+Microsoft SQL Server
+
+- É um sistema gerenciador de banco de dados relacional, desenvolvido pela Microsoft - 1989
+- Produtos da família SQL Server:
+    Miscrosoft SQL Server: Database Engine: SQL (bancos OLTP)
+    Miscrosoft SQL Server: Analytical Engine: SSAS (bancos OLAP)
+    Miscrosoft SQL Server: Report Engine: SSRS (Pastas)
+    Miscrosoft SQL Server: ETL Engine: SSIS (Catálogos)
+
+A ferramenta client oficial da Microsoft, para o SQL Server, é o Microsoft SQL Server Management Studio (SSMS)
+********************************************************************************************
+
+1. Linguagem de Definição de Dados (DDL)
+- Data Definition Language - criar, alterar e excluir objetos de banco de dados. 
+- Em um Projeto de Banco de Dados: usada na etapa de geração do esquema físico no BD.
+
+- CREATE:
+    Usuários
+    Indices
+    Visoes
+    Chaves estrangeiras 
+    Constraints
+    Sequences
+    Sinonimo, etc
+
+CREATE DATABASE <Nome_do_Banco_de_Dados> (
+    column1 datatype [NOTNULL / NOTE NULL]
+)
+
+---------------------------------------------------------------------------------------------
+- ALTER:
+    Evitar recriação de estruturas de dados: BD, tabelas, etc
+    Alterar as estruturas de dados que já estejam criadas
+    Desde que não viole as regras do SGBD / modelo de dados 
+
+
+---------------------------------------------------------------------------------------------
+- DROP
+    Excluir estruturas de dados e outros objetos do BD
+
+
+********************************************************************************************
+
+2. Linguagem de Manipulação de Dados (DML)
+- Data Manipulation Language (DML)
+- Classe da Linguagem SQL com comandos que permitem:
+	Inserir dados (novas linhas/tuplas)
+	Atualizar dados (linhas/tuplas existentes)
+	Excluir dados: remover linhas/tuplas existentes
+	Selecionar dados: recuperar dados armazenados para exibição e/ou processamento
+
+---------------------------------------------------------------------------------------------
+- SELECT 
+SELECT <relação de colunas ou *> FROM 
+
+---------------------------------------------------------------------------------------------
+- Alias de Coluna - AS (apelido, não muda o nome da col no BD)
+ex: SELECT Name AS Nome_do_Produto FROM Production.Product;
+
+- Alias de Tabela 
+ex: SELECT Name, ProductNumber FROM Production.Product AS P;
+
+---------------------------------------------------------------------------------------------
+- Expressão CASE (múltiplas correspondencias não sao permitidas, cláusula ELSE se existir, caso contrário retorna NULL)(nao altera os dados no BD)
+ex:
+CASE Expressão_de_Entrada
+WHEN expressão_de_comparação THEN expressão_resultado [...n]
+[ELSE expressão_resultado_else]
+END
+
+ou 
+
+CASE 
+WHEN Expressão_Booleana THEN expressão_resultado [...n]
+[ELSE expressão_resultado_else]
+END
+---------------------------------------------------------------------------------------------
+
+- Operadores aritméticos e de concatenação
+...+''+....+''+....
+
+Ordem: divisão, multiplicação, módulo, adição/concatenação, subtração
+
+---------------------------------------------------------------------------------------------
+ - ORDER BY
+asc
+desc
+
+Ordem de execução dos comandos:
+1- FROM 
+2- WHERE
+3- GROUP BY 
+4- HAVING
+5- SELECT
+6- ORDER BY
+
+---------------------------------------------------------------------------------------------
+- WHERE (filtro)
+- TOP (limite da quantidade de linhas)
+- DISTINCT
+- Operadores de Comparação 
+- Operadores Lógicos 
+- Ordem de Avaliação dos Operadores
+- Alias  de Coluna na cláusula WHERE
+
+
+********************************************************************************************
+
+AGRUPAMENTO DE DADOS E FUNÇÕES DE AGREGAÇÃO
+
+- Funções de Agregação - Executar cálculos (contagem, soma, média etc) em um conjunto de linhas, ao invés de fazê-lo linha a linha.
+Ignoram os valores nulos (NULL).
+
+- MIN() E MAX()
+- COUNT(*) conta TODAS as linhas incluindo valores nulos.
+COUNT(expressão) conta sobre um produto específico  e de linhas não nulas.
+- SUM() e AVG() valores não nulos 
+
+- Funções de Agregação x Valores Nulos
+
+
+---------------------------------------------------------------------------------------------
+
+AGRUPAMENTOS DE DADOS - Criação de subconjuntos de dados
+
+- Agrupamento de dados - podemos usar as funções de agregação para realizar cálculos numéricos por agrupamento. 
+- A cláusula GROUP BY
+Ordem de execussão: 
+1. FROM
+2. WHERE
+3. GROUP BY 
+4. HAVING
+5. SELECT
+6. ORDER BY
+
+- Alias no GROUP BY 
+- Filtrando Agrupamento de Dados 
+
+
+********************************************************************************************
+
+INTRODUÇÃO À JOIN(junção) DE TABELAS 
+
+- Inner Join (interseção)
+- cross join (combina todos os valores)
+- outer join:
+(left outer join - interseção e tabela à esquerda
+ right outer join - interseção e tabela à direita
+full outer join - linhas da esquerda + linhas da direita(as quais não forem encontradas linhas correspondentes na tabela contrária))
+
+********************************************************************************************
+
+3. Linguagem de Controle de Acesso a Dados (DCL)
+
+- Segurn;a em Bancos Relacionais 
+- Principais Componentes de segurança
+
+Valor crescente, seja financeiro ou estratégico, dos dados armazenados. Geração de conhecimento, informação, vantagem competitiva.
+
+- Projeteção dos dados armazenados:
+    Proteção externa ao SGBD: firewall, ativírus, etc.
+    Proteção interna do SGBD: autenticação, atualização, criptografia, etc. 
+
+- Processo de Concessão das permissões de acesso. 
+- Processo de Revogação das permissões de acesso. 
+
+PERMISSION (privilégio)
+ROLE (papel)
+PRINCIPALS (entidades com acesso concedido)
+SECURABLES (são concedidas as permissões para os principals)
+
+------------------------------------------------------------------------
+
+Concessão de privilégios
+
+- Feita atraves do comando GRANT da classe DCL
+- Privilégios para poder executar comandos DML/DDL/DCL
+- Sintaxe DML: GRANT [Privilégio(s)= PERMISSION]  ON [Objeto=SECURABLES] To [Usuário=PRINCIPALS];
+- Sintaxe DDL: GRANT [Privilégio(s)] TO [Usuário];
+
+
+- Permissões de acesso são verificadas em tempo de execução das queries. 
+- Caso o usuário não tenha permissão em qualquer objeto contida da query, toda execução da query falha.  
+
+- ROLES: Papéis, funções, perfis. 
+
+- "Mix" de Opções: roles  + roles com roles + privilégios diretamente. 
+
+- Revogação de Privilégios:
+    Feita atraves do comando REVOKE da classe DCL 
+    Revogação de privilégios para execução de comandos DML/DDL/DCL.
+    Sintaxe DML: REVOKE[privilégios(s)] ON [Objeto] FROM [Usuário];
+
+- Opção CASCADE: remove permissões concedidas por usuário com WITH GRANT OPTION
+    Exemplo de Revogação de privilégio DML: REVOKE DELETE ON DatabaseLog FROM Nome_do_Banco_de_Dados;
+
+- Comando DENY: para negar privilégios em objetos (*alguns SGBDs)
+
+
+********************************************************************************************
